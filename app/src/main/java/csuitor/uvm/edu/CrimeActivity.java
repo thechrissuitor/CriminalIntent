@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class CrimeActivity extends SingleFragmentActivity {
 
-    public static final String EXTRA_CRIME_ID = "csuitor.uvm.edu.criminalintent.crime_id";
+    public static final String EXTRA_CRIME_ID = "csuitor.uvm.edu.criminalintent.crime_id"; //TODO: This may be a problem.
 
     /* CrimeFragment knows which crime to display by passing the crimeID as an Intent
     * extra when CrimeActivity is started.*/

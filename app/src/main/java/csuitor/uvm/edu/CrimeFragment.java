@@ -13,6 +13,8 @@ import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 
+import java.util.UUID;
+
 public class CrimeFragment extends Fragment {
     private Crime mCrime;
     private EditText mTitleField; // a text field that the user can edit
@@ -22,7 +24,8 @@ public class CrimeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCrime = new Crime();
+        UUID crimeId = (UUID) getActivity().getIntent().getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID); // retrieve the crime id
+        mCrime = CrimeLab.get(getActivity()).getCrime(crimeId); // use the crime ide to retrieve the crime
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +42,7 @@ public class CrimeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
 
         mTitleField = (EditText) v.findViewById(R.id.crime_title); // find an EditText with the corresponding id
+        mTitleField.setText(mCrime.getTitle()); // fill the crime's title with what it's been set as
         // make a listener
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -59,6 +63,7 @@ public class CrimeFragment extends Fragment {
         });
 
         mSolvedCheckBox = (CheckBox)v.findViewById(R.id.crime_solved); // find a checkbox with the id "crime_solved"
+        mSolvedCheckBox.setChecked(mCrime.isSolved()); // set it as solved/unsolved if it's already been set
         // set a listener for checkboxes
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
