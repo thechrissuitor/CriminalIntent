@@ -20,11 +20,12 @@ public class CrimeFragment extends Fragment {
     private EditText mTitleField; // a text field that the user can edit
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
+    private static final String ARG_CRIME_ID = "crime_id";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID crimeId = (UUID) getActivity().getIntent().getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID); // retrieve the crime id
+        UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId); // use the crime ide to retrieve the crime
     }
     @Override
@@ -77,6 +78,16 @@ public class CrimeFragment extends Fragment {
         mDateButton.setEnabled(false); // disable the button so as to not confuse the user that it has any function when pressed
 
         return v;
+    }
+
+    /* This method creates a bundle to save states for a fragment. */
+    public static CrimeFragment newInstance(UUID crimeId){
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CRIME_ID, crimeId);
+
+        CrimeFragment fragment = new CrimeFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
 }

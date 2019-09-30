@@ -39,14 +39,26 @@ public class CrimeListFragment extends Fragment {
         return view;
     }
 
+    /* Add additional functionality to onResume().
+    *  It now calls updateUI().*/
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
+    }
+
     /* This method connects the Adapter to the RecyclerView.
     * Sets up CrimeListFragment's.*/
     private void updateUI(){
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
 
-        mAdapter = new CrimeAdapter(crimes);
-        mCrimeRecyclerView.setAdapter(mAdapter);
+        if(mAdapter == null){
+            mAdapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     // Create a ViewHolder to inflate and own the layout.
@@ -71,7 +83,7 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View view){
             // make a fragment
-            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+            Intent intent = CrimePagerActivity.newInent(getActivity(), mCrime.getId()); // pressing a list item in CrimeListFragment starts an instance of CrimePagerActivity
             startActivity(intent);
         }
         // this method is called each time a new Crime should be displayed.

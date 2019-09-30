@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class CrimeActivity extends SingleFragmentActivity {
 
-    public static final String EXTRA_CRIME_ID = "csuitor.uvm.edu.criminalintent.crime_id"; //TODO: This may be a problem.
+    private static final String EXTRA_CRIME_ID = "csuitor.uvm.edu.criminalintent.crime_id"; //TODO: This may be a problem.
 
     /* CrimeFragment knows which crime to display by passing the crimeID as an Intent
     * extra when CrimeActivity is started.*/
@@ -22,9 +22,10 @@ public class CrimeActivity extends SingleFragmentActivity {
         return intent;
     }
 
-    // create a fragment using SingleFragmentActivity.java
+    // create a fragment using CrimeFragment.java
     @Override
     protected Fragment createFragment() {
-        return new CrimeFragment();
+        UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
+        return CrimeFragment.newInstance(crimeId);
     }
 }
