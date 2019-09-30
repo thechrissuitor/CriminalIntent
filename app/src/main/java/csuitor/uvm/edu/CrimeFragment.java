@@ -1,5 +1,7 @@
 package csuitor.uvm.edu;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 
 import static android.widget.CompoundButton.*;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
@@ -25,6 +28,7 @@ public class CrimeFragment extends Fragment {
     private CheckBox mSolvedCheckBox;
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
+    private static final int REQUEST_DATE = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,18 +82,38 @@ public class CrimeFragment extends Fragment {
         });
 
         mDateButton = (Button) v.findViewById(R.id.crime_date); // find a button with the correct id
-        mDateButton.setText(mCrime.getDate().toString()); // change the text to the current date
+        updateDate();
         // show a DatePickerFragment when the date button is pressed
         mDateButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 FragmentManager manager = getFragmentManager();
-                DatePickerFragment dialog = new DatePickerFragment();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE); // CrimeFragment is now the target fragment of the DatePickerFragment
                 dialog.show(manager, DIALOG_DATE);
             }
         });
 
         return v;
+    }
+
+    // This method retrieves the extra, sets the date on the Crime, and refreshes the text of the date button.
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode != Activity.RESULT_OK){
+            return;
+        }
+
+        if (requestCode == REQUEST_DATE){
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mCrime.setDate(date);
+            updateDate();
+        }
+    }
+
+    // this method updates the text on the date button
+    private void updateDate() {
+        mDateButton.setText(mCrime.getDate().toString());
     }
 
     /* This method creates a bundle to save states for a fragment. */
