@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class CrimePagerActivity extends AppCompatActivity {
 
-    private static final String EXTRA_CRIME_ID = "csuitor.uvm.edu.criminalintent.crime_id"; // this line might cause problems
+    private static final String EXTRA_CRIME_ID = "csuitor.uvm.edu.crime_id"; // this line might cause problems
 
     private ViewPager mViewPager;
     private List<Crime> mCrimes;
@@ -38,20 +38,6 @@ public class CrimePagerActivity extends AppCompatActivity {
         mCrimes = CrimeLab.get(this).getCrimes(); // get the list of crimes
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        /*
-            By default, the ViewPager shows the first item in its PagerAdapter. You can have it show the crime
-            that was selected by setting the ViewPager’s current item to the index of the selected crime.
-            At the end of CrimePagerActivity.onCreate(Bundle), find the index of the crime to display by
-            looping through and checking each crime’s ID. When you find the Crime instance whose mId matches
-            the crimeId in the intent extra, set the current item to the index of that Crime.
-         */
-        for(int i = 0; i < mCrimes.size(); i++){
-            if(mCrimes.get(i).getId().equals(crimeId)){
-                mViewPager.setCurrentItem(i);
-                break;
-            }
-        }
-
         /* FragmentSatePagerAdaper is the agent managing the conversation with ViewPager.
         *  A FragmentManager is passed as a parameter, so the FragmentStatePagerAdapter
         *  can do its job. */
@@ -70,5 +56,19 @@ public class CrimePagerActivity extends AppCompatActivity {
                 return mCrimes.size();
             }
         });
+
+        /*
+            By default, the ViewPager shows the first item in its PagerAdapter. You can have it show the crime
+            that was selected by setting the ViewPager’s current item to the index of the selected crime.
+            At the end of CrimePagerActivity.onCreate(Bundle), find the index of the crime to display by
+            looping through and checking each crime’s ID. When you find the Crime instance whose mId matches
+            the crimeId in the intent extra, set the current item to the index of that Crime.
+         */
+        for(int i = 0; i < mCrimes.size(); i++){
+            if(mCrimes.get(i).getId().equals(crimeId)){
+                mViewPager.setCurrentItem(i);
+                break;
+            }
+        }
     }
 }

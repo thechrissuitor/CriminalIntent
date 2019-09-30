@@ -12,6 +12,9 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import static android.widget.CompoundButton.*;
 
 import java.util.UUID;
 
@@ -21,6 +24,7 @@ public class CrimeFragment extends Fragment {
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
     private static final String ARG_CRIME_ID = "crime_id";
+    private static final String DIALOG_DATE = "DialogDate";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,13 +52,13 @@ public class CrimeFragment extends Fragment {
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(
-                CharSequence s, int start, int count, int after) {
+                    CharSequence s, int start, int count, int after) {
                 // This space intentionally left blank
             }
             //  call toString() on the CharSequence that is the user’s input. Set the returned string as the Crime's title
             @Override
             public void onTextChanged(
-                CharSequence s, int start, int before, int count) {
+                    CharSequence s, int start, int before, int count) {
                 mCrime.setTitle(s.toString());
             }
             @Override
@@ -75,7 +79,15 @@ public class CrimeFragment extends Fragment {
 
         mDateButton = (Button) v.findViewById(R.id.crime_date); // find a button with the correct id
         mDateButton.setText(mCrime.getDate().toString()); // change the text to the current date
-        mDateButton.setEnabled(false); // disable the button so as to not confuse the user that it has any function when pressed
+        // show a DatePickerFragment when the date button is pressed
+        mDateButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                FragmentManager manager = getFragmentManager();
+                DatePickerFragment dialog = new DatePickerFragment();
+                dialog.show(manager, DIALOG_DATE);
+            }
+        });
 
         return v;
     }
